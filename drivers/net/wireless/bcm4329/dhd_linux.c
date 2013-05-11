@@ -67,8 +67,10 @@
 static struct wifi_platform_data *wifi_control_data = NULL;
 #endif
 struct semaphore wifi_control_sem;
-
+extern struct semaphore  ap_eth_sema;
 static struct resource *wifi_irqres = NULL;
+
+void dhd_write_mac_address( unsigned char *buf);
 
 int wifi_get_irq_number(unsigned long *irq_flags_ptr)
 {
@@ -93,6 +95,36 @@ int wifi_set_carddetect(int on)
 #endif
 	return 0;
 }
+
+
+/*porting,WIFI Module,hanshirong 66539,20101108 begin++ */
+static void dhd_enable_mmchost_polling(int enable)
+{
+    mm_segment_t        oldfs;
+    struct file     *filp;
+    int         length;
+    oldfs = get_fs();
+    set_fs(KERNEL_DS);
+    do {
+        char buf[3];
+        char sdcc_param[128] = {0};
+        sprintf(sdcc_param, "/sys/devices/platform/msm_sdcc.%d/polling", 3);
+        printk("%s: %s\n",__FUNCTION__,sdcc_param);
+
+        filp = filp_open(sdcc_param, O_RDWR, S_IRUSR);
+        if (IS_ERR(filp) || !filp->f_op)
+            break;
+        length = snprintf(buf, sizeof(buf), "%d\n", enable ? 1 : 0);
+        if (filp->f_op->write(filp, buf, length, &filp->f_pos) != length) {
+            break;
+        }
+    } while (0);
+    if (!IS_ERR(filp)) {
+        filp_close(filp, NULL);
+    }
+    set_fs(oldfs);
+}
+/*porting,WIFI Module,hanshirong 66539,20101108 end-- */
 
 int wifi_set_power(int on, unsigned long msec)
 {
@@ -125,12 +157,13 @@ int wifi_get_mac_addr(unsigned char *buf)
 	DHD_TRACE(("%s\n", __FUNCTION__));
 	if (!buf)
 		return -EINVAL;
-#ifdef CONFIG_WIFI_CONTROL_FUNC
-	if (wifi_control_data && wifi_control_data->get_mac_addr) {
-		return wifi_control_data->get_mac_addr(buf);
-	}
-#endif
-	return -EOPNOTSUPP;
+
+	dhd_write_mac_address(buf);
+
+	if(!buf)
+		return -EINVAL;
+
+	return 0;
 }
 
 void *wifi_get_country_code(char *ccode)
@@ -159,7 +192,8 @@ static int wifi_probe(struct platform_device *pdev)
 	wifi_irqres = platform_get_resource_byname(pdev, IORESOURCE_IRQ, "bcm4329_wlan_irq");
 
 	wifi_set_power(1, 0);	/* Power On */
-	wifi_set_carddetect(1);	/* CardDetect (0->1) */
+	dhd_enable_mmchost_polling(1);
+	//wifi_set_carddetect(1);	/* CardDetect (0->1) */
 
 	up(&wifi_control_sem);
 	return 0;
@@ -175,7 +209,7 @@ static int wifi_remove(struct platform_device *pdev)
 #endif
 	DHD_TRACE(("## %s\n", __FUNCTION__));
 	wifi_set_power(0, 0);	/* Power Off */
-	wifi_set_carddetect(0);	/* CardDetect (1->0) */
+	dhd_enable_mmchost_polling(1);
 
 	up(&wifi_control_sem);
 	return 0;
@@ -348,11 +382,17 @@ struct semaphore dhd_registration_sem;
 #define DHD_REGISTRATION_TIMEOUT  12000  /* msec : allowed time to finished dhd registration */
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27)) */
 /* load firmware and/or nvram values from the filesystem */
+
+/*porting,WIFI Module,hanshirong 66539,20101108 begin++ */
+char mac_param[MOD_PARAM_PATHLEN] = {0};
+module_param_string(mac_param, mac_param, MOD_PARAM_PATHLEN, 0);
+/*porting,WIFI Module,hanshirong 66539,20101108 end-- */
+
 module_param_string(firmware_path, firmware_path, MOD_PARAM_PATHLEN, 0);
 module_param_string(nvram_path, nvram_path, MOD_PARAM_PATHLEN, 0);
 
 /* Error bits */
-module_param(dhd_msg_level, int, 0);
+//module_param(dhd_msg_level, int, 0);
 
 /* Spawn a thread for system ioctls (set mac, set mcast) */
 uint dhd_sysioc = TRUE;
@@ -443,7 +483,7 @@ int dhd_idletime = DHD_IDLETIME_TICKS;
 module_param(dhd_idletime, int, 0);
 
 /* Use polling */
-uint dhd_poll = FALSE;
+uint dhd_poll = TRUE;
 module_param(dhd_poll, uint, 0);
 
 /* Use interrupts */
@@ -465,6 +505,8 @@ extern uint dhd_deferred_tx;
 module_param(dhd_deferred_tx, uint, 0);
 
 
+uint dhd_apsta = 0;
+module_param(dhd_apsta, uint, 0);
 
 #ifdef SDTEST
 /* Echo packet generator (pkts/s) */
@@ -564,7 +606,9 @@ static void dhd_set_packet_filter(int value, dhd_pub_t *dhd)
 #if defined(CONFIG_HAS_EARLYSUSPEND)
 static int dhd_set_suspend(int value, dhd_pub_t *dhd)
 {
+#if 0
 	int power_mode = PM_MAX;
+#endif
 	/* wl_pkt_filter_enable_t	enable_parm; */
 	char iovbuf[32];
 	int bcn_li_dtim = 3;
@@ -581,8 +625,10 @@ static int dhd_set_suspend(int value, dhd_pub_t *dhd)
 			/* Kernel suspended */
 			DHD_TRACE(("%s: force extra Suspend setting \n", __FUNCTION__));
 
+#if 0
 			dhdcdc_set_ioctl(dhd, 0, WLC_SET_PM,
 				(char *)&power_mode, sizeof(power_mode));
+#endif
 
 			/* Enable packet filter, only allow unicast packet to send up */
 			dhd_set_packet_filter(1, dhd);
@@ -605,10 +651,12 @@ static int dhd_set_suspend(int value, dhd_pub_t *dhd)
 
 			/* Kernel resumed  */
 			DHD_TRACE(("%s: Remove extra suspend setting \n", __FUNCTION__));
+#if 0
 
 			power_mode = PM_FAST;
 			dhdcdc_set_ioctl(dhd, 0, WLC_SET_PM, (char *)&power_mode,
 				sizeof(power_mode));
+#endif
 
 			/* disable pkt filter */
 			dhd_set_packet_filter(0, dhd);
@@ -643,12 +691,29 @@ static void dhd_suspend_resume_helper(struct dhd_info *dhd, int val)
 	dhd_os_wake_unlock(dhdp);
 }
 
+/*porting,WIFI Module,hanshirong 66539,20101108 begin++ */
+#ifdef SOFTAP
+extern struct net_device *ap_net_dev;
+#endif
+/*porting,WIFI Module,hanshirong 66539,20101108 end-- */
+
 static void dhd_early_suspend(struct early_suspend *h)
 {
 	struct dhd_info *dhd = container_of(h, struct dhd_info, early_suspend);
-
-	DHD_TRACE(("%s: enter\n", __FUNCTION__));
-
+	DHD_ERROR(("%s: enter\n", __FUNCTION__));
+	if (dhd->pub.busstate == DHD_BUS_DOWN)
+	{
+		DHD_ERROR(("%s: >>>>>DHD_BUS_DOWN<<<<<\n", __FUNCTION__));
+		return;
+	}
+/*porting,WIFI Module,hanshirong 66539,20101108 begin++ */
+#ifdef SOFTAP
+	if ( ap_net_dev != NULL) {
+		printk("%s: SOFTAP on, skip this.\n", __FUNCTION__);
+		return;
+	}
+#endif
+/*porting,WIFI Module,hanshirong 66539,20101108 end-- */
 	if (dhd)
 		dhd_suspend_resume_helper(dhd, 1);
 }
@@ -656,9 +721,21 @@ static void dhd_early_suspend(struct early_suspend *h)
 static void dhd_late_resume(struct early_suspend *h)
 {
 	struct dhd_info *dhd = container_of(h, struct dhd_info, early_suspend);
+	DHD_ERROR(("%s: enter\n", __FUNCTION__));
 
-	DHD_TRACE(("%s: enter\n", __FUNCTION__));
-
+	if (dhd->pub.busstate == DHD_BUS_DOWN)
+	{
+		DHD_ERROR(("%s: >>>>>DHD_BUS_DOWN<<<<<\n", __FUNCTION__));
+		return;
+	}
+/*porting,WIFI Module,hanshirong 66539,20101108 begin++ */
+#ifdef SOFTAP
+	if ( ap_net_dev != NULL) {
+		printk("%s: SOFTAP on, skip this.\n", __FUNCTION__);
+		return;
+	}
+#endif
+/*porting,WIFI Module,hanshirong 66539,20101108 end-- */
 	if (dhd)
 		dhd_suspend_resume_helper(dhd, 0);
 }
@@ -937,8 +1014,10 @@ _dhd_set_mac_address(dhd_info_t *dhd, int ifidx, struct ether_addr *addr)
 	return ret;
 }
 
+#if 0
 #ifdef SOFTAP
 extern struct net_device *ap_net_dev;
+#endif
 /* semaphore that the soft AP CODE waits on */
 extern struct semaphore ap_eth_sema;
 #endif
@@ -2219,6 +2298,93 @@ fail:
 	return NULL;
 }
 
+/*porting,WIFI Module,hanshirong 66539,20101108 begin++ */
+static int
+wmic_ether_aton(const char *orig, unsigned char *eth)
+{
+	const char *bufp;
+	int i;
+
+	i = 0;
+	for(bufp = orig; *bufp != '\0'; ++bufp) {
+		unsigned int val;
+		unsigned char c;
+
+		c = *bufp++;
+
+		if (c >= '0' && c <= '9') val = c - '0';
+		else if (c >= 'a' && c <= 'f') val = c - 'a' + 10;
+		else if (c >= 'A' && c <= 'F') val = c - 'A' + 10;
+		else {
+			printk("%s: MAC value is invalid\n", __FUNCTION__);
+			break;
+		}
+
+		val <<= 4;
+		c = *bufp++;
+		if (c >= '0' && c <= '9') val |= c - '0';
+		else if (c >= 'a' && c <= 'f') val |= c - 'a' + 10;
+		else if (c >= 'A' && c <= 'F') val |= c - 'A' + 10;
+		else {
+			printk("%s: MAC value is invalid\n", __FUNCTION__);
+			break;
+		}
+
+		eth[i] = (unsigned char) (val & 0377);
+		if(++i == ETHER_ADDR_LEN) {
+			/* That's it.  Any trailing junk? */
+			c = *bufp;
+			if ((c != '\0') && (c != 0x20) && (c != 0x0a) && (c != 0x0d)) {
+				printk("wmic_ether_aton end char is not correct [%c:0x%x]\n", c, c);
+				return 0;
+			}
+			return 1;
+		}
+		c = *bufp;
+		if (c != ':') {
+			printk("wmic_ether_aton: c[%c:0x%x] is not :\n", c,c);
+			break;
+		}
+	}
+	return 0;
+}
+
+
+void dhd_write_mac_address(unsigned char *buf)
+{
+
+	unsigned char mac_p[ETHER_ADDR_LEN];
+	struct ether_addr *mac_addr = NULL;
+
+	mac_addr = (struct ether_addr *)mac_p;
+
+	if (strlen(mac_param))
+	{
+		/* convert mac address */
+		DHD_TRACE(("%s: mac_param is %s\n", __FUNCTION__, mac_param));
+
+		if (!wmic_ether_aton(mac_param, (unsigned char *)mac_p)) {
+			DHD_ERROR(("%s: convert mac value fail\n", __FUNCTION__));
+			return ;
+		}
+
+		/* the converted mac address */
+		DHD_TRACE(("%s: converted mac value is %02x:%02x:%02x:%02x:%02x:%02x\n",
+			  __FUNCTION__,
+			  mac_p[0], mac_p[1], mac_p[2],
+			  mac_p[3], mac_p[4], mac_p[5] ));
+
+		/* Update MAC address into RAM */
+		//_dhd_set_mac_address(dhd, ifidx, mac_addr);
+		memcpy(buf, (unsigned char *)mac_addr, ETHER_ADDR_LEN);
+	}
+	else
+	{
+		DHD_TRACE(("Warning %s: mac_param is NULL \n", __FUNCTION__));
+	}
+}
+
+/*porting,WIFI Module,hanshirong 66539,20101108 end-- */
 
 int
 dhd_bus_start(dhd_pub_t *dhdp)
@@ -2423,6 +2589,7 @@ dhd_net_attach(dhd_pub_t *dhdp, int ifidx)
 	DHD_TRACE(("%s: ifidx %d\n", __FUNCTION__, ifidx));
 
 	ASSERT(dhd && dhd->iflist[ifidx]);
+
 	net = dhd->iflist[ifidx]->net;
 
 	ASSERT(net);

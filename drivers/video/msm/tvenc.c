@@ -33,18 +33,15 @@
 #define TVENC_C
 #include "tvenc.h"
 #include "msm_fb.h"
-/*< DTS2010082601848 lijianzhao 20100826 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 #include <mach/gpio.h>
 #endif
-/* DTS2010082601848 lijianzhao 20100826 end >*/
 #include "mdp4.h"
 /* AXI rate in KHz */
 #define MSM_SYSTEM_BUS_RATE	128000000
-
-/*< DTS2010122805110 lijianzhao 20101229 begin */
+#ifdef CONFIG_HUAWEI_KERNEL
 extern boolean tv_cable_connected;
-/* DTS2010122805110 lijianzhao 20101229 end >*/
+#endif
 static int tvenc_probe(struct platform_device *pdev);
 static int tvenc_remove(struct platform_device *pdev);
 
@@ -211,10 +208,7 @@ static int tvenc_off(struct platform_device *pdev)
 		pr_err("%s: pm_vid_en(off) failed! %d\n",
 		__func__, ret);
 	mdp4_extn_disp = 0;
-/*< DTS2010122805110 lijianzhao 20101229 begin */
-/*< DTS2011030202729  liliang 20110302  begin */
 #ifdef CONFIG_HUAWEI_KERNEL
-    /*<DTS2011060201308 yanghaimin 20110602, begin*/
     /* U8800-51 has no TV-OUT so remove it, GPIO33 of U8800-51 is used for HAC(Hearing Aid) */
 	/* U8800 and U8800-51 have tv_out function only */
 	if(machine_is_msm7x30_u8800() || machine_is_msm8255_u8800_pro()) 
@@ -226,11 +220,8 @@ static int tvenc_off(struct platform_device *pdev)
 			gpio_set_value(33, 0);    
 		}
 	}
-    /* DTS2011060201308 yanghaimin 20110602, end>*/
 	
 #endif
-/* DTS2011030202729  liliang 20110302 end >*/
-/* DTS2010122805110 lijianzhao 20101229 end >*/
 	return ret;
 }
 
@@ -266,23 +257,15 @@ static int tvenc_on(struct platform_device *pdev)
 		tvenc_pdata->pm_vid_en(0);
 		goto error;
 	}
-/*< DTS2010082601848 lijianzhao 20100826 begin */
 /* Enable TV_OUT ctl */
 #ifdef CONFIG_HUAWEI_KERNEL
-/*< DTS2010092400487  lijianzhao 20100924 begin */
 /* U8800 have tv_out function,only */
-	/*< DTS2010112702297 wangquanli 201001125 begin */
-	/*< DTS2011030202729  liliang 20110302  begin */
 	if(machine_is_msm7x30_u8800() || machine_is_msm7x30_u8800_51() || machine_is_msm8255_u8800_pro()) 
 	{
 		gpio_tlmm_config(GPIO_CFG(33, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA),GPIO_CFG_ENABLE);
 		gpio_set_value(33, 1);
 	}
-/* DTS2011030202729  liliang 20110302 end >*/
-/* DTS2010112702297 wangquanli 201001125 end >*/
-/* DTS2010092400487  lijianzhao 20100924 end >*/
 #endif
-/* DTS2010082601848 lijianzhao 20100826 end >*/
 
 	ret = panel_next_on(pdev);
 	if (ret) {

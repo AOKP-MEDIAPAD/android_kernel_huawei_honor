@@ -61,7 +61,7 @@ extern int sdioh_mmc_irq(int irq);
 #endif
 
 /* Customer specific Host GPIO defintion  */
-static int dhd_oob_gpio_num = -1; /* GG 19 */
+int dhd_oob_gpio_num = -1; /* GG 19 */
 
 module_param(dhd_oob_gpio_num, int, 0644);
 MODULE_PARM_DESC(dhd_oob_gpio_num, "DHD oob gpio number");
@@ -71,7 +71,9 @@ int dhd_customer_oob_irq_map(unsigned long *irq_flags_ptr)
 	int  host_oob_irq = 0;
 
 #ifdef CUSTOMER_HW2
-	host_oob_irq = wifi_get_irq_number(irq_flags_ptr);
+	//host_oob_irq = wifi_get_irq_number(irq_flags_ptr);
+	dhd_oob_gpio_num = CUSTOM_OOB_GPIO_NUM;
+	host_oob_irq = MSM_GPIO_TO_INT(dhd_oob_gpio_num);
 
 #else /* for NOT  CUSTOMER_HW2 */
 #if defined(CUSTOM_OOB_GPIO_NUM)

@@ -18,7 +18,7 @@
 #include "msm_fb.h"
 #include "tvenc.h"
 #include "external_common.h"
-/*< DTS2011011501390 lijianzhao 20110115 begin */
+
 #ifdef CONFIG_HUAWEI_KERNEL
 #define TVOUT_NTSC 0
 #define TVOUT_PAL 1
@@ -29,9 +29,9 @@
 #else
 #define TV_OUT_DEBUG(fmt, args...)
 #endif
+#ifdef CONFIG_HUAWEI_KERNEL
 boolean tv_cable_connected = FALSE;
-/* DTS2011011501390 lijianzhao 20110115 end >*/
-
+#endif
 #define TVOUT_HPD_DUTY_CYCLE 3000
 
 #define TV_DIMENSION_MAX_WIDTH		720
@@ -92,9 +92,10 @@ static void tvout_check_status()
 		return;
 	}
 
-/*< DTS2010122805110 lijianzhao 20101229 begin */
 	if (tvout_msm_state->hpd_int_status & BIT(2)) {
+#ifdef CONFIG_HUAWEI_KERNEL
 		tv_cable_connected = FALSE;
+#endif
 		DEV_DBG("%s: cable plug-out\n", __func__);
 		mutex_lock(&external_common_state_hpd_mutex);
 		external_common_state->hpd_state = FALSE;
@@ -103,7 +104,9 @@ static void tvout_check_status()
 				KOBJ_OFFLINE);
 		tvout_msm_state->prev_hpd_int_status = BIT(2);
 	} else if (tvout_msm_state->hpd_int_status & BIT(0)) {
+#ifdef CONFIG_HUAWEI_KERNEL
 		tv_cable_connected = TRUE;
+#endif
 		DEV_DBG("%s: cable plug-in\n", __func__);
 		mutex_lock(&external_common_state_hpd_mutex);
 		external_common_state->hpd_state = TRUE;
@@ -112,7 +115,6 @@ static void tvout_check_status()
 				KOBJ_ONLINE);
 		tvout_msm_state->prev_hpd_int_status = BIT(0);
 	}
-/* DTS2010122805110 lijianzhao 20101229 end >*/
 }
 
 /* ISR for TV out cable detect */
@@ -269,7 +271,7 @@ static int tvout_on(struct platform_device *pdev)
 #endif
 
 	var = &mfd->fbi->var;
-/*< DTS2011011501390 lijianzhao 20110115 begin */
+
 #ifdef CONFIG_HUAWEI_KERNEL
 	if(TVOUT_PAL == var->reserved[4])
 	{
@@ -280,7 +282,7 @@ static int tvout_on(struct platform_device *pdev)
 		tvout_msm_state->video_mode = NTSC_M;
 	}
 #endif
-/* DTS2011011501390 lijianzhao 20110115 end >*/
+
 	if (var->reserved[3] >= NTSC_M && var->reserved[3] <= PAL_N)
 		external_common_state->video_resolution = var->reserved[3];
 
