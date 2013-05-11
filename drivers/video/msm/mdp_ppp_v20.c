@@ -2443,6 +2443,7 @@ void mdp_adjust_start_addr(uint8 **src0,
 	}
 }
 
+/*< DTS2012022307519 zhongjinrong 20120405 begin */
 /* Add qcom patch to resolve tranparent problem ,case number:00807793 */
 void mdp_set_blend_attr(MDPIBUF *iBuf,
 			uint32 *alpha,
@@ -2549,3 +2550,4 @@ void mdp_set_blend_attr(MDPIBUF *iBuf,
 		}
 	}
 }
+/* DTS2012022307519 zhongjinrong 20120405 end >*/

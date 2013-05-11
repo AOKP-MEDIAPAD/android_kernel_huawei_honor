@@ -48,20 +48,26 @@
 #include "tvenc.h"
 #include "mdp.h"
 #include "mdp4.h"
-
+/*< DTS2011072500979 jiaoshuangwei 20110725 begin */
 /*add the code for dynamic gamma function  */
 #ifdef CONFIG_FB_DYNAMIC_GAMMA
 #include <linux/hardware_self_adapt.h>
 #endif
-
+/* DTS2011072500979 jiaoshuangwei 20110725 end >*/
+/*< DTS2011081601583 pengyu 20110816 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 #include "hw_lcd_common.h"
 #endif
+/* DTS2011081601583 pengyu 20110816 end >*/
 
+/* <DTS2010081400556 shenjinming 20100814 begin */
+/*< DTS2010071902252 shenjinming 20100719 begin */
 #ifdef CONFIG_HUAWEI_EVALUATE_POWER_CONSUMPTION 
 #include <mach/msm_battery.h>
 #endif
-
+/* DTS2010071902252 shenjinming 20100719 end >*/
+/* DTS2010081400556 shenjinming 20100814 end> */
+/* <BU5D10614 shenjinming 20100528 begin*/
 #ifdef CONFIG_FB_MSM_LOGO
 #ifndef CONFIG_HUAWEI_KERNEL
 #define INIT_IMAGE_FILE "/initlogo.rle"
@@ -71,21 +77,24 @@ extern int load_565rle_image(char *filename);
 extern int load_888rle_image(char *filename);
 #endif
 #endif
+/* BU5D10614 shenjinming 20100528 end>*/
 
 #ifdef CONFIG_FB_MSM_TRIPLE_BUFFER
+/*< DTS2012033105116 lijianzhao 20120401 begin */
 /* increase three framebuffers to four */
 #ifdef CONFIG_ARCH_MSM7X27A
 #define MSM_FB_NUM	4
 #else
 #define MSM_FB_NUM	3
 #endif
+/* DTS2012033105116 lijianzhao 20120401 end >*/
 #endif
-
+/*< DTS2011072500979 jiaoshuangwei 20110725 begin */
 /*add the code for dynamic gamma function  */
 #ifdef CONFIG_FB_DYNAMIC_GAMMA
 extern int nt35560_dimytic_gamma_setting_gamma(int);
 #endif
-
+/* DTS2011072500979 jiaoshuangwei 20110725 end >*/
 static unsigned char *fbram;
 static unsigned char *fbram_phys;
 static int fbram_size;
@@ -137,7 +146,7 @@ static int msm_fb_suspend_sub(struct msm_fb_data_type *mfd);
 static int msm_fb_ioctl(struct fb_info *info, unsigned int cmd,
 			unsigned long arg);
 static int msm_fb_mmap(struct fb_info *info, struct vm_area_struct * vma);
-
+/* < DTS2011082701325 fengwei 20110831 begin */
 /*function declare*/
 #ifdef CONFIG_FB_AUTO_CABC
 int msm_fb_config_cabc(struct msm_fb_data_type *mfd, struct msmfb_cabc_config cabc_cfg);
@@ -145,7 +154,7 @@ int msm_fb_config_cabc(struct msm_fb_data_type *mfd, struct msmfb_cabc_config ca
 #ifdef CONFIG_FB_DYNAMIC_GAMMA
 int msm_fb_set_dynamic_gamma(struct msm_fb_data_type *mfd, enum danymic_gamma_mode gamma_mode);
 #endif
-
+/* DTS2011082701325 fengwei 20110831 end > */
 #ifdef MSM_FB_ENABLE_DBGFS
 
 #define MSM_FB_MAX_DBGFS 1024
@@ -155,16 +164,24 @@ int msm_fb_debugfs_file_index;
 struct dentry *msm_fb_debugfs_root;
 struct dentry *msm_fb_debugfs_file[MSM_FB_MAX_DBGFS];
 
+/* < DTS2011082701325 fengwei 20110831 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 boolean lcd_have_resume = FALSE;
+/*< DTS2012032307608 zhongjinrong 20120403 begin */
 /* Remove qcom backlight mechanism,user our own */
 boolean last_backlight_setting = FALSE;
 int last_backlight_level = 0;
+/* DTS2012032307608 zhongjinrong 20120403 end >*/
 int last_gamma_mode = GAMMA25;
 struct msmfb_cabc_config last_cabc_mode;
 boolean last_cabc_setting = FALSE;
 boolean last_gamma_setting = FALSE;
+/*< DTS2012021602342 zhongjinrong 20120224 begin */
+/*delete some lines*/
+/* DTS2012021602342 zhongjinrong 20120224 end >*/
 #endif
+/* DTS2011082701325 fengwei 20110831 end > */
+/* < DTS2012021306187  xushunhai 20120213 begin */
 #ifdef CONFIG_HUAWEI_EVALUATE_POWER_CONSUMPTION
 static int bright = -1;
 static struct timer_list bright_timer;
@@ -182,6 +199,7 @@ static void light_notify_timer_func(unsigned long data)
 	schedule_work(&light_notify_work);  
 }
 #endif
+/* DTS2012021306187 xushunhai 20120213 end > */
 
 DEFINE_MUTEX(msm_fb_notify_update_sem);
 void msmfb_no_update_notify_timer_cb(unsigned long data)
@@ -242,10 +260,11 @@ static void msm_fb_set_bl_brightness(struct led_classdev *led_cdev,
 
 	if (!bl_lvl && value)
 		bl_lvl = 1;
-
+/*< DTS2012032307608 zhongjinrong 20120403 begin */
 /* Remove qcom backlight mechanism,user our own */
 /* If LCD don't resume ,don't turn on LCD backlight */
 #ifdef CONFIG_HUAWEI_KERNEL
+/* < DTS2011082701325 fengwei 20110831 begin */
 	if(FALSE == lcd_have_resume)
 	{
 		last_backlight_level = bl_lvl;
@@ -256,9 +275,11 @@ static void msm_fb_set_bl_brightness(struct led_classdev *led_cdev,
 		msm_fb_set_backlight(mfd, bl_lvl);
 		last_backlight_setting = FALSE;
 	}
+/* DTS2011082701325 fengwei 20110831 end > */
 #else
 	msm_fb_set_backlight(mfd, bl_lvl);
 #endif
+/* DTS2012032307608 zhongjinrong 20120403 end >*/
 }
 
 static struct led_classdev backlight_led = {
@@ -406,13 +427,14 @@ static int msm_fb_probe(struct platform_device *pdev)
 		fbram_size =
 			pdev->resource[0].end - pdev->resource[0].start + 1;
 		fbram_phys = (char *)pdev->resource[0].start;
-
+        /*< DTS2012040606946 lizhigang 20120406 begin */
 #if (defined CONFIG_FRAMEBUF_SELF_ADAPT) && (defined CONFIG_ARCH_MSM7X27A)  
         /* __va isn't fit here, framebuffer from sharememory must used ioremap to map the memory.  */
 		fbram = ioremap((unsigned long)fbram_phys, fbram_size);
 #else
 		fbram = __va(fbram_phys);
 #endif
+        /* DTS2012040606946 lizhigang 20120406 end >*/ 
 
 		if (!fbram) {
 			printk(KERN_ERR "fbram ioremap failed!\n");
@@ -783,16 +805,19 @@ static void msmfb_early_resume(struct early_suspend *h)
 }
 #endif
 
+/*< DTS2012032307608 zhongjinrong 20120403 begin */
 /* Remove qcom backlight mechanism,user our own */
 #ifndef CONFIG_HUAWEI_KERNEL
 static int unset_bl_level, bl_updated;
 #endif
+/* DTS2012032307608 zhongjinrong 20120403 end >*/
 static int bl_level_old;
 
 void msm_fb_set_backlight(struct msm_fb_data_type *mfd, __u32 bkl_lvl)
 {
 	struct msm_fb_panel_data *pdata;
 
+/*< DTS2012032307608 zhongjinrong 20120403 begin */
 /* Remove qcom backlight mechanism,user our own */
 #ifndef CONFIG_HUAWEI_KERNEL
 	if (!mfd->panel_power_on || !bl_updated) {
@@ -802,10 +827,12 @@ void msm_fb_set_backlight(struct msm_fb_data_type *mfd, __u32 bkl_lvl)
 		unset_bl_level = 0;
 	}
 #endif
+/* DTS2012032307608 zhongjinrong 20120403 end >*/
 
 	pdata = (struct msm_fb_panel_data *)mfd->pdev->dev.platform_data;
 
 	if ((pdata) && (pdata->set_backlight)) {
+	/*< DTS2011122306018 fengwei 20111224 begin */
 #ifndef CONFIG_HUAWEI_KERNEL
 		down(&mfd->sem);
 		if (bl_level_old == bkl_lvl) {
@@ -820,6 +847,7 @@ void msm_fb_set_backlight(struct msm_fb_data_type *mfd, __u32 bkl_lvl)
 		if (bl_level_old == bkl_lvl) {
 			return;
 		}
+		/*< DTS2012012101194 lijianzhao 20120121 begin */
 		if (get_hw_lcd_ctrl_bl_type() == CTRL_BL_BY_LCD)
 		{
 			/* MIPI use two semaphores */
@@ -854,18 +882,26 @@ void msm_fb_set_backlight(struct msm_fb_data_type *mfd, __u32 bkl_lvl)
 			pdata->set_backlight(mfd);
 			up(&mfd->sem);
 		}
+		/* DTS2012012101194 lijianzhao 20120121 end >*/
 		bl_level_old = mfd->bl_level;
 #endif
-
+		/* DTS2011122306018 fengwei 20111224 end >*/
+/* <DTS2012010500892 sibingsong 20120105 begin */
 #ifdef CONFIG_HUAWEI_EVALUATE_POWER_CONSUMPTION
+		/* < DTS2012021306187  xushunhai 20120213 begin */
         bright = bkl_lvl;
      	/*notify lcd consume after 1 seconds*/
 	    mod_timer(&bright_timer, jiffies + msecs_to_jiffies(1000));
+		/* DTS2012021306187 xushunhai 20120213 end > */
+		/* < DTS2012041805625 yuezenglong 20120420 begin */
 		/*use timer to notify msm current backlight level*/
+		/* DTS2012041805625 yuezenglong 20120420 end > */
 #endif
+/* DTS2012010500892 sibingsong 20120105 end> */
 	}
 }
 
+/* <DTS2010101800931 shenjinming 20101028 begin */ 
 #ifdef CONFIG_HUAWEI_KERNEL
 int is_pwdn_chg_resume = 0;
 int from_pwdn_chg_resume(void)
@@ -873,7 +909,7 @@ int from_pwdn_chg_resume(void)
     return is_pwdn_chg_resume;
 }
 #endif
-
+/* DTS2010101800931 shenjinming 20101028 end> */ 
 static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 			    boolean op_enable)
 {
@@ -894,9 +930,11 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 	case FB_BLANK_UNBLANK:
 		if (!mfd->panel_power_on) {
 			msleep(16);
+/* <DTS2010101800931 shenjinming 20101028 begin */
          #ifdef CONFIG_HUAWEI_KERNEL
             is_pwdn_chg_resume = 0;
          #endif            
+/* DTS2010101800931 shenjinming 20101028 end> */ 
 			ret = pdata->on(mfd->pdev);
 			if (ret == 0) {
 				mfd->panel_power_on = TRUE;
@@ -911,10 +949,11 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 	    }
 	  }
 */	
-
+/* < DTS2011082701325 fengwei 20110831 begin */
 /* LCD resume completed ,then turn on lcd backlight */
 #ifdef CONFIG_HUAWEI_KERNEL
 				lcd_have_resume = TRUE;
+				/*< DTS2012032307608 zhongjinrong 20120403 begin */
 				/* Remove qcom backlight mechanism,user our own */
 				if(TRUE == last_backlight_setting)
 				{
@@ -922,6 +961,7 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 					last_backlight_setting = FALSE;
 					printk("%s:Waiting for LCD resume ,then set backlight level=%d\n",__func__,last_backlight_level);
 				}
+				/* DTS2012032307608 zhongjinrong 20120403 end >*/
 				if (is_panel_support_dynamic_gamma())
 				{
 					if(TRUE == last_gamma_setting)
@@ -942,17 +982,22 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 				}
 
 #endif
+/* DTS2011082701325 fengwei 20110831 end > */
 			}
 		}
 		break;
+/* <DTS2010101800931 shenjinming 20101028 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 	case FB_BLANK_PWDN_GHG_RESUME:
 		mdelay(100);
         is_pwdn_chg_resume = 1;
 		ret = pdata->on(mfd->pdev);
         mfd->panel_power_on = TRUE;
+/* < DTS2011082701325 fengwei 20110831 begin */
 /* LCD resume completed ,then turn on lcd backlight */
+#ifdef CONFIG_HUAWEI_KERNEL
 		lcd_have_resume = TRUE;
+		/*< DTS2012032307608 zhongjinrong 20120403 begin */
 		/* Remove qcom backlight mechanism,user our own */
 		if(TRUE == last_backlight_setting)
 		{
@@ -960,6 +1005,7 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 			last_backlight_setting = FALSE;
 			printk("%s:Waiting for LCD resume ,then set backlight level=%d\n",__func__,last_backlight_level);
 		}
+		/* DTS2012032307608 zhongjinrong 20120403 end >*/
 		if (is_panel_support_dynamic_gamma())
 		{
 			if(TRUE == last_gamma_setting)
@@ -978,8 +1024,11 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 				printk("%s:Waiting for LCD resume ,then set cabc mode =%d\n",__func__,last_cabc_mode.mode);
 			}
 		}
+#endif
+/* DTS2011082701325 fengwei 20110831 end > */
         break;
 #endif
+/* DTS2010101800931 shenjinming 20101028 end> */  
 	case FB_BLANK_VSYNC_SUSPEND:
 	case FB_BLANK_HSYNC_SUSPEND:
 	case FB_BLANK_NORMAL:
@@ -991,10 +1040,12 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 			mfd->op_enable = FALSE;
 			curr_pwr_state = mfd->panel_power_on;
 			mfd->panel_power_on = FALSE;
+/*< DTS2012032307608 zhongjinrong 20120403 begin */
 /* Remove qcom backlight mechanism,user our own */
 #ifndef CONFIG_HUAWEI_KERNEL
 			bl_updated = 0;
 #endif
+/* DTS2012032307608 zhongjinrong 20120403 end >*/
 
 			msleep(16);
 			ret = pdata->off(mfd->pdev);
@@ -1002,9 +1053,11 @@ static int msm_fb_blank_sub(int blank_mode, struct fb_info *info,
 				mfd->panel_power_on = curr_pwr_state;
 
 			mfd->op_enable = TRUE;
+/* < DTS2011082701325 fengwei 20110831 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 			lcd_have_resume = FALSE;
 #endif
+/* DTS2011082701325 fengwei 20110831 end > */
 		}
 		break;
 	}
@@ -1416,9 +1469,11 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 	fbi->screen_base = fbram;
 	fbi->fix.smem_start = (unsigned long)fbram_phys;
 
+    /* <BU5D10614 shenjinming 20100528 begin*/
 #ifndef CONFIG_HUAWEI_KERNEL
     memset(fbi->screen_base, 0x0, fix->smem_len);
 #endif
+    /* BU5D10614 shenjinming 20100528 end>*/
 
 	mfd->op_enable = TRUE;
 	mfd->panel_power_on = FALSE;
@@ -1463,11 +1518,13 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 	     mfd->index, fbi->var.xres, fbi->var.yres, fbi->fix.smem_len);
 
 #ifdef CONFIG_FB_MSM_LOGO
+/* <BU5D10614 shenjinming 20100528 begin*/
 #ifndef CONFIG_HUAWEI_KERNEL
 	if (!load_565rle_image(INIT_IMAGE_FILE)) ;	/* Flip buffer */
 #else
 	if (!load_888rle_image(INIT_IMAGE_FILE)) ;	/* Flip buffer */
 #endif
+/* BU5D10614 shenjinming 20100528 end>*/
 #endif
 	ret = 0;
 
@@ -1671,9 +1728,11 @@ static int msm_fb_pan_display(struct fb_var_screeninfo *var,
 	struct msm_fb_data_type *mfd = (struct msm_fb_data_type *)info->par;
 	struct msm_fb_panel_data *pdata;
 
+/*< DTS2010092400275 lijianzhao 20101013 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
     static bool is_first_frame = TRUE;
 #endif
+/* DTS2010092400275 lijianzhao 20101013 end >*/   
 	if ((!mfd->op_enable) || (!mfd->panel_power_on))
 		return -EPERM;
 
@@ -1736,18 +1795,23 @@ static int msm_fb_pan_display(struct fb_var_screeninfo *var,
 	down(&msm_fb_pan_sem);
 	mdp_set_dma_pan_info(info, dirtyPtr,
 			     (var->activate == FB_ACTIVATE_VBL));
+/*< DTS2010092400275 lijianzhao 20101013 begin */
 /* Do not refresh the first frame, because the frame's data is 0x00 */
 #ifdef CONFIG_HUAWEI_KERNEL
+	/*< DTS2012022408079 zhongjinrong 20120306 begin */
 	if(unlikely(is_first_frame == TRUE))
 	{
 		is_first_frame = FALSE;
 		printk("%s:Don't refresh the first frame to LCD\n",__func__);
 	}
 	else
+	/* DTS2012022408079 zhongjinrong 20120306 end >*/
 #endif
+/* DTS2010092400275 lijianzhao 20101013 end >*/ 
 	mdp_dma_pan_update(info);
 	up(&msm_fb_pan_sem);
 
+/*< DTS2012032307608 zhongjinrong 20120403 begin */
 /* Remove qcom backlight mechanism,user our own */
 #ifndef CONFIG_HUAWEI_KERNEL		
 	if (unset_bl_level && !bl_updated) {
@@ -1763,6 +1827,7 @@ static int msm_fb_pan_display(struct fb_var_screeninfo *var,
 		}
 	}
 #endif
+/* DTS2012032307608 zhongjinrong 20120403 end >*/
 
 	++mfd->panel_info.frame_count;
 	return 0;
@@ -2855,6 +2920,7 @@ static int msmfb_overlay_play(struct fb_info *info, unsigned long *argp)
 
 	ret = mdp4_overlay_play(info, &req);
 
+/*< DTS2012032307608 zhongjinrong 20120403 begin */
 /* Remove qcom backlight mechanism,user our own */
 #ifndef CONFIG_HUAWEI_KERNEL		
 	if (unset_bl_level && !bl_updated) {
@@ -2870,6 +2936,7 @@ static int msmfb_overlay_play(struct fb_info *info, unsigned long *argp)
 		}
 	}
 #endif
+/* DTS2012032307608 zhongjinrong 20120403 end >*/
 
 	return ret;
 }
@@ -3133,8 +3200,10 @@ static void msmfb_set_color_conv(struct mdp_csc *p)
 }
 #endif
 
+/*< DTS2011072500979 jiaoshuangwei 20110725 begin */
 /*< add for dynamic gamma function begin */ 
 #ifdef CONFIG_FB_DYNAMIC_GAMMA
+/*< DTS2011081601583 pengyu 20110816 begin */
 int msm_fb_set_dynamic_gamma(struct msm_fb_data_type *mfd, enum danymic_gamma_mode gamma_mode)
 {
     int ret = 0;
@@ -3148,8 +3217,11 @@ int msm_fb_set_dynamic_gamma(struct msm_fb_data_type *mfd, enum danymic_gamma_mo
 
     return ret;
 }
+/* DTS2011081601583 pengyu 20110816 end >*/
 #endif
+/* DTS2011072500979 jiaoshuangwei 20110725 end >*/
 
+/*< DTS2011081800466 pengyu 20110818 begin */
 #ifdef CONFIG_FB_AUTO_CABC
 /***************************************************************
 Function: msm_fb_config_cabc
@@ -3174,6 +3246,7 @@ int msm_fb_config_cabc(struct msm_fb_data_type *mfd, struct msmfb_cabc_config ca
     return ret;
 }
 #endif
+/* DTS2011081800466 pengyu 20110818 end >*/
 
 static int msmfb_notify_update(struct fb_info *info, unsigned long *argp)
 {
@@ -3207,9 +3280,11 @@ static int msm_fb_ioctl(struct fb_info *info, unsigned int cmd,
 	struct fb_cursor cursor;
 	struct fb_cmap cmap;
 	struct mdp_histogram hist;
+/*< DTS2011072500979 jiaoshuangwei 20110725 begin */
 #ifdef CONFIG_FB_DYNAMIC_GAMMA
 	int gamma_setting_value;
 #endif
+/* DTS2011072500979 jiaoshuangwei 20110725 end >*/
 #ifndef CONFIG_FB_MSM_MDP40
 	struct mdp_ccs ccs_matrix;
 #else
@@ -3438,6 +3513,7 @@ static int msm_fb_ioctl(struct fb_info *info, unsigned int cmd,
 	case MSMFB_HISTOGRAM_START:
 		if (!mfd->panel_power_on)
 			return -EPERM;
+
 		if (!mfd->do_histogram)
 			return -ENODEV;
 		ret = mdp_start_histogram(info);
@@ -3516,10 +3592,11 @@ static int msm_fb_ioctl(struct fb_info *info, unsigned int cmd,
 		}
 
 		break;
-
+/*< DTS2011072500979 jiaoshuangwei 20110725 begin */
 /* add for dynamic gamma function begin*/ 
 #ifdef CONFIG_FB_DYNAMIC_GAMMA
     case MSMFB_DYNAMIC_GAMMA:
+/*< DTS2011081601583 pengyu 20110816 begin */
         if (is_panel_support_dynamic_gamma())
         {
             ret = copy_from_user(&gamma_setting_value, argp, sizeof(gamma_setting_value));
@@ -3530,6 +3607,7 @@ static int msm_fb_ioctl(struct fb_info *info, unsigned int cmd,
                      __func__);
                 return ret;
             }
+			/* < DTS2011082701325 fengwei 20110831 begin */
 			if(FALSE == lcd_have_resume)
 			{
 				/* backup gamma_mode that want to set */
@@ -3544,14 +3622,17 @@ static int msm_fb_ioctl(struct fb_info *info, unsigned int cmd,
 				ret = msm_fb_set_dynamic_gamma(mfd, gamma_setting_value);
 				last_gamma_setting = FALSE;
 			}
+			/* DTS2011082701325 fengwei 20110831 end > */
         }
         else
         {
             MSM_FB_INFO("This panel can not support dynamic gamma function");
         }
+/* DTS2011081601583 pengyu 20110816 end >*/
 		break;
 #endif
-
+/* DTS2011072500979 jiaoshuangwei 20110725 end >*/
+/*< DTS2011081800466 pengyu 20110818 begin */
 #ifdef CONFIG_FB_AUTO_CABC
     case MSMFB_AUTO_CABC:
         if (is_panel_support_auto_cabc())
@@ -3566,6 +3647,7 @@ static int msm_fb_ioctl(struct fb_info *info, unsigned int cmd,
                      __func__);
                 return ret;
             }
+			/* < DTS2011082701325 fengwei 20110831 begin */
 			if(FALSE == lcd_have_resume)
 			{
 				/* backup gamma_mode that want to set */
@@ -3580,6 +3662,7 @@ static int msm_fb_ioctl(struct fb_info *info, unsigned int cmd,
 				ret = msm_fb_config_cabc(mfd, cabc_cfg);
 				last_cabc_setting =FALSE;
 			}
+			/* DTS2011082701325 fengwei 20110831 end > */
 
         }
         else
@@ -3588,7 +3671,7 @@ static int msm_fb_ioctl(struct fb_info *info, unsigned int cmd,
         }
         break;
 #endif
-
+/* DTS2011081800466 pengyu 20110818 end >*/
 	default:
 		MSM_FB_INFO("MDP: unknown ioctl (cmd=%x) received!\n", cmd);
 		ret = -EINVAL;
@@ -3773,6 +3856,7 @@ int get_fb_phys_info(unsigned long *start, unsigned long *len, int fb_num)
 	return 0;
 }
 EXPORT_SYMBOL(get_fb_phys_info);
+/* < DTS2012021306187  xushunhai 20120213 begin */
 #ifdef CONFIG_HUAWEI_EVALUATE_POWER_CONSUMPTION 
 static void __exit msm_fb_exit(void)
 {
@@ -3780,6 +3864,7 @@ static void __exit msm_fb_exit(void)
 	 del_timer(&bright_timer);
 }
 #endif
+/* DTS2012021306187 xushunhai 20120213 end > */
 int __init msm_fb_init(void)
 {
 	int rc = -ENODEV;
@@ -3803,16 +3888,20 @@ int __init msm_fb_init(void)
 		}
 	}
 #endif
+/* < DTS2012021306187  xushunhai 20120213 begin */
 #ifdef CONFIG_HUAWEI_EVALUATE_POWER_CONSUMPTION 
     /*init lcd consume notify timer */
 	setup_timer(&bright_timer, light_notify_timer_func, 0);
 	/*init lcd consume notify work */
 	INIT_WORK(&light_notify_work, light_notify_work_func);  
 #endif
+/* DTS2012021306187 xushunhai 20120213 end > */
 	return 0;
 }
 
 module_init(msm_fb_init);
+/* < DTS2012021306187  xushunhai 20120213 begin */
 #ifdef CONFIG_HUAWEI_EVALUATE_POWER_CONSUMPTION 
 module_exit(msm_fb_exit);
 #endif
+/* DTS2012021306187 xushunhai 20120213 end > */

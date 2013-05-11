@@ -1,4 +1,6 @@
+#/*< DTS2012011904543 lijianzhao 20120119 begin */
 obj-y += io.o dma.o memory.o hardware_self_adapt.o
+#/* DTS2012011904543 lijianzhao 20120119 end >*/
 ifndef CONFIG_ARM_ARCH_TIMER
 obj-y += timer.o
 endif
@@ -151,10 +153,13 @@ obj-$(CONFIG_MSM_SPM_V2) += spm-v2.o spm_devices.o
 
 obj-$(CONFIG_MSM_DMA_TEST) += dma_test.o
 obj-$(CONFIG_SURF_FFA_GPIO_KEYPAD) += keypad-surf-ffa.o
-
+#/*< DTS2012020306500 lijianzhao 20120204 begin */
 obj-$(CONFIG_HUAWEI_GPIO_KEYPAD) += keypad-huawei.o
+#/* DTS2012020306500 lijianzhao 20120204 end >*/
+#/*< DTS2012021003176 yanzhijun 20120210 begin */
+# merge DTS2011110800980 fangxinyong  
 obj-$(CONFIG_HUAWEI_KEY_TEST) += huawei_key_test.o
-
+#/* DTS2012021003176 yanzhijun 20120210 end >*/ 
 obj-$(CONFIG_ARCH_MSM7X01A) += board-halibut.o devices-msm7x01a.o clock-pcom-lookup.o
 obj-$(CONFIG_MACH_TROUT) += board-trout.o board-trout-gpio.o
 obj-$(CONFIG_MACH_TROUT) += board-trout-keypad.o board-trout-panel.o
@@ -214,11 +219,15 @@ obj-$(CONFIG_MACH_MSM7X27_SURF) += board-msm7x27.o devices-msm7x27.o
 obj-$(CONFIG_MACH_MSM7X27_FFA) += board-msm7x27.o devices-msm7x27.o
 obj-$(CONFIG_ARCH_MSM7X27A) += clock-pcom-lookup.o devices-msm7x27a.o
 obj-$(CONFIG_MACH_MSM7X27A_RUMI3) += board-msm7x27a.o board-msm7627a-storage.o board-msm7627a-bt.o board-msm7627a-camera.o
+#/*< DTS2012041800928 yuanmingming 20120418 begin */
 obj-$(CONFIG_MACH_MSM7X27A_SURF) += board-msm7x27a.o board-msm7627a-storage.o board-msm7627a-bt.o board-msm7627a-camera.o board-msm7627a-wlan.o
+#/* DTS2012041800928  yuanmingming 20120418 end > */
 obj-$(CONFIG_MACH_MSM7X27A_FFA) += board-msm7x27a.o board-msm7627a-storage.o board-msm7627a-bt.o board-msm7627a-camera.o
 obj-$(CONFIG_MACH_MSM7627A_QRD1) += board-qrd7627a.o board-msm7627a-storage.o board-msm7627a-bt.o board-msm7627a-camera.o
-obj-$(CONFIG_ARCH_MSM7X30) += board-msm7x30.o devices-msm7x30.o memory_topology.o
-obj-$(CONFIG_ARCH_MSM7X30) += clock-local.o clock-7x30.o acpuclock-7x30.o
+#/*< BU5D08419 haoqingtao 20100424 begin*/    
+obj-$(CONFIG_ARCH_MSM7X30) += board-hw7x30.o devices-msm7x30.o memory_topology.o
+#/* BU5D08419 haoqingtao 20100424 end>*/   
+obj-$(CONFIG_ARCH_MSM7X30) += clock-local.o clock-7x30.o acpuclock-7x30.o 
 obj-$(CONFIG_MACH_MSM7X25_SURF) += board-msm7x27.o devices-msm7x25.o
 obj-$(CONFIG_MACH_MSM7X25_FFA) += board-msm7x27.o devices-msm7x25.o
 obj-$(CONFIG_ARCH_MSM8960) += clock-local.o clock-dss-8960.o clock-8960.o clock-rpm.o
@@ -246,10 +255,19 @@ obj-$(CONFIG_ARCH_MSM9615) += board-9615.o devices-9615.o board-9615-regulator.o
 obj-$(CONFIG_ARCH_MSM9615) += clock-local.o clock-9615.o acpuclock-9615.o clock-rpm.o
 obj-$(CONFIG_ARCH_MSMCOPPER) += board-copper.o board-dt.o
 
+#/* <DTS2010120303164 penghai 20101203 begin */
 obj-$(CONFIG_HUAWEI_KEY_TEST) += huawei_key_test.o
+#/* DTS2010120303164 penghai 20101203 end> */ 
+#/*< DTS2012020306500 lijianzhao 20120204 begin */
+#/* move to driver/leds/makefile */
+#/* DTS2012020306500 lijianzhao 20120204 end >*/
 
+#/* <DTS2011030801141 renxigang 20110308 begin */
 obj-$(CONFIG_HUAWEI_SMEM_SLEEP_LOG) += smem_sleep_log.o
+#/* DTS2011030801141 renxigang 20110308 end > */
+#/*< DTS2012011801998 chenxi 20120203 begin */
 obj-$(CONFIG_HUAWEI_KERNEL) += smem_vendor_huawei.o
+#/* DTS2012011801998 chenxi 20120203 end >*/
 
 obj-$(CONFIG_MACH_SAPPHIRE) += board-sapphire.o board-sapphire-gpio.o
 obj-$(CONFIG_MACH_SAPPHIRE) += board-sapphire-keypad.o board-sapphire-panel.o

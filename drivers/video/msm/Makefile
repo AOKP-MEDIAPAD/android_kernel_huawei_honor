@@ -55,17 +55,19 @@ obj-$(CONFIG_FB_MSM_EBI2) += ebi2_lcd.o
 
 # LCDC
 obj-$(CONFIG_FB_MSM_LCDC) += lcdc.o
-
+#/*< DTS2012020306500 lijianzhao 20120204 begin */
 obj-$(CONFIG_FB_HUAWEI_LCDC_HX8357B) += lcdc_hx8357b_hvga.o
 obj-$(CONFIG_FB_HUAWEI_LCDC_HX8357C) += lcdc_hx8357c_hvga.o	
 obj-$(CONFIG_FB_HUAWEI_LCDC_R61529) += lcdc_truly_r61529_hvga.o
 obj-$(CONFIG_FB_HUAWEI_LCDC_NT35410) += lcdc_nt35410_hvga.o
 obj-$(CONFIG_FB_HUAWEI_LCDC_HX8347D) += lcdc_hx8347d_qvga.o
 obj-$(CONFIG_FB_HUAWEI_LCDC_HX8347G) += lcdc_hx8347g_qvga.o
+#/* DTS2012020306500 lijianzhao 20120204 end >*/
 # MDDI
 msm_mddi-objs := mddi.o mddihost.o mddihosti.o
 obj-$(CONFIG_FB_MSM_MDDI) += msm_mddi.o
 
+#/*< DTS2012021007223 lijianzhao 20120211 begin */
 obj-$(CONFIG_FB_HUAWEI_MDDI_NT35582) += mddi_nt35582.o
 obj-$(CONFIG_FB_HUAWEI_MDDI_NT35510) += mddi_nt35510.o
 obj-$(CONFIG_FB_HUAWEI_MDDI_NT35510_TYPE2) += mddi_nt35510_type2.o
@@ -76,6 +78,8 @@ obj-$(CONFIG_FB_HUAWEI_MDDI_HX8357C) += mddi_hx8357c.o
 obj-y += hw_backlight.o
 obj-y += hw_lcd_common.o
 obj-y += lcd_hw_debug.o
+#/* DTS2012021007223 lijianzhao 20120211 end >*/
+
 # External MDDI
 msm_mddi_ext-objs := mddihost_e.o mddi_ext.o
 obj-$(CONFIG_FB_MSM_EXTMDDI) += msm_mddi_ext.o
@@ -83,12 +87,16 @@ obj-$(CONFIG_FB_MSM_EXTMDDI) += msm_mddi_ext.o
 # MIPI gereric
 msm_mipi-objs := mipi_dsi.o mipi_dsi_host.o
 obj-$(CONFIG_FB_MSM_MIPI_DSI) += msm_mipi.o
+#/*< DTS2012020306500 lijianzhao 20120204 begin */
 
 # MIPI manufacture
+
 obj-$(CONFIG_FB_HUAWEI_MIPI_DSI_NT35560) += mipi_nt35560_cmd_fwvga.o
 obj-$(CONFIG_FB_HUAWEI_MIPI_DSI_RSP61408) += mipi_rsp61408_cmd_wvga.o
 obj-$(CONFIG_FB_HUAWEI_MIPI_DSI_HX8357C) += mipi_hx8357c_cmd_hvga.o
 obj-$(CONFIG_FB_HUAWEI_MIPI_DSI_HX8369A) += mipi_hx8369a_cmd_wvga.o
+#/* DTS2012020306500 lijianzhao 20120204 end >*/
+
 obj-$(CONFIG_FB_MSM_MIPI_DSI_TOSHIBA) += mipi_toshiba.o
 obj-$(CONFIG_FB_MSM_MIPI_DSI_NOVATEK) += mipi_novatek.o
 obj-$(CONFIG_FB_MSM_MIPI_DSI_RENESAS) += mipi_renesas.o
@@ -108,7 +116,7 @@ endif
 obj-y += msm_fb_panel.o
 obj-$(CONFIG_FB_MSM_EBI2_TMD_QVGA_EPSON_QCIF) += ebi2_tmd20.o
 obj-$(CONFIG_FB_MSM_EBI2_TMD_QVGA_EPSON_QCIF) += ebi2_l2f.o
-
+#/*< DTS2012021007223 lijianzhao 20120211 begin */
 ifeq ($(CONFIG_FB_MSM_MDDI_AUTO_DETECT),y)
 obj-y += mddi_prism.o
 obj-y += mddi_toshiba.o
@@ -166,7 +174,7 @@ obj-$(CONFIG_FB_MSM_HDMI_ADV7520_PANEL) += adv7520.o
 obj-$(CONFIG_FB_MSM_LCDC_ST15_WXGA) += lcdc_st15.o
 obj-$(CONFIG_FB_MSM_HDMI_MSM_PANEL) += hdmi_msm.o
 obj-$(CONFIG_FB_MSM_EXT_INTERFACE_COMMON) += external_common.o
-
+#/* DTS2012021007223 lijianzhao 20120211 end >*/
 obj-$(CONFIG_FB_MSM_TVOUT) += tvout_msm.o
 
 obj-$(CONFIG_FB_MSM_EXTMDDI_SVGA) += mddi_ext_lcd.o

@@ -39,9 +39,11 @@ extern uint32 *mddi_reg_read_value_ptr;
 mddi_lcd_func_type mddi_lcd;
 
 extern mddi_client_capability_type mddi_client_capability_pkt;
+/* <DTS2010101800931 shenjinming 20101028 begin */ 
 #ifdef CONFIG_HUAWEI_KERNEL
 extern int from_pwdn_chg_resume(void);
 #endif
+/* DTS2010101800931 shenjinming 20101028 end> */ 
 
 #ifdef MDDI_HOST_WINDOW_WORKAROUND
 /* Tables showing number of rows that would cause a packet length
@@ -202,6 +204,7 @@ int mddi_host_register_read(uint32 reg_addr,
 
 	return ret;
 }				/* mddi_host_register_read */
+/* <DTS2010101800931 shenjinming 20101028 begin */
 int mddi_host_register_write(uint32 reg_addr,
      uint32 reg_val, enum mddi_data_packet_size_type packet_size,
      boolean wait, mddi_llist_done_cb_type done_cb, mddi_host_type host) {
@@ -292,6 +295,7 @@ int mddi_host_register_write(uint32 reg_addr,
 	return ret;
 }				/* mddi_host_register_write */
 
+/* DTS2010101800931 shenjinming 20101028 end> */  
 boolean mddi_host_register_read_int
     (uint32 reg_addr, uint32 *reg_value_ptr, mddi_host_type host) {
 	mddi_linked_list_type *curr_llist_ptr;

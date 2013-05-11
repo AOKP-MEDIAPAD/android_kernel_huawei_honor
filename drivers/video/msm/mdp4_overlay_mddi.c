@@ -32,9 +32,11 @@
 #include "mdp.h"
 #include "msm_fb.h"
 #include "mdp4.h"
+/*< DTS2011090102706 jiaoshuangwei 20110901 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 #include <linux/hardware_self_adapt.h>
 #endif
+/* DTS2011090102706 jiaoshuangwei 20110901 end >*/
 static struct mdp4_overlay_pipe *mddi_pipe;
 static struct msm_fb_data_type *mddi_mfd;
 static int busy_wait_cnt;
@@ -89,6 +91,7 @@ void mdp4_mddi_vsync_enable(struct msm_fb_data_type *mfd,
 		MDP_OUTP(MDP_BASE + 0x20c, data);
 	}
 }
+/*< DTS2010090303422 lijianzhao 20100908 begin */
 /* Config MDP reg according bpp ,the interface for 
  * dma_s pipe or dma_p(overlay) pipe.
  */
@@ -139,6 +142,7 @@ void mdp4_switch_bpp_config(struct msm_fb_data_type *mfd,uint32 bpp)
         return;    
 }
 #endif
+/* DTS2010090303422 lijianzhao 20100908 end >*/
 
 #define WHOLESCREEN
 
@@ -239,7 +243,14 @@ void mdp4_overlay_update_lcd(struct msm_fb_data_type *mfd)
 		pipe->src_x = 0;
 		pipe->dst_h = fbi->var.yres;
 		pipe->dst_w = fbi->var.xres;
+/*< DTS2012021602342 zhongjinrong 20120224 begin */
+/*< DTS2011090102706 jiaoshuangwei 20110901 begin */
+/*<  DTS2011091905632 jiaoshuangwei 20110924 begin */
+	/*return to the qualcomm original code */
 		pipe->dst_y = 0;
+/*  DTS2011091905632 jiaoshuangwei 20110924 end >*/
+/* DTS2011090102706 jiaoshuangwei 20110901 end >*/
+/* DTS2012021602342 zhongjinrong 20120224 end >*/
 		pipe->dst_x = 0;
 		pipe->srcp0_addr = (uint32)src;
 		pipe->srcp0_ystride = fbi->fix.line_length;
@@ -476,11 +487,13 @@ void mdp4_mddi_dma_busy_wait(struct msm_fb_data_type *mfd)
 	if (need_wait) {
 		/* wait until DMA finishes the current job */
 		pr_debug("%s: PENDING, pid=%d\n", __func__, current->pid);
+/* <DTS2010101602934 hufeng 20101016 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
         wait_for_completion_interruptible_timeout(&mfd->dma->comp, 1 * HZ);
 #else
 		wait_for_completion(&mfd->dma->comp);
 #endif
+/* DTS2010101602934 hufeng 20101016 end> */
 	}
 	pr_debug("%s: DONE, pid=%d\n", __func__, current->pid);
 }
@@ -488,12 +501,19 @@ void mdp4_mddi_dma_busy_wait(struct msm_fb_data_type *mfd)
 void mdp4_mddi_kickoff_video(struct msm_fb_data_type *mfd,
 				struct mdp4_overlay_pipe *pipe)
 {
+    /*< DTS2011072603082 fengwei 20110806 begin*/
+    /*delete some lines*/
+    /*DTS2011072603082 fengwei 20110806 end >*/
+
 	mdp4_mddi_overlay_kickoff(mfd, pipe);
 }
 
 void mdp4_mddi_kickoff_ui(struct msm_fb_data_type *mfd,
 				struct mdp4_overlay_pipe *pipe)
 {
+    /*< DTS2011072603082 fengwei 20110806 begin*/
+    /*delete some lines*/
+    /*DTS2011072603082 fengwei 20110806 end >*/
 	mdp4_mddi_overlay_kickoff(mfd, pipe);
 }
 
@@ -501,6 +521,7 @@ void mdp4_mddi_kickoff_ui(struct msm_fb_data_type *mfd,
 void mdp4_mddi_overlay_kickoff(struct msm_fb_data_type *mfd,
 				struct mdp4_overlay_pipe *pipe)
 {
+/*< DTS2010080403325 lijianzhao 20100804 begin */
 /* use dma_p(overlay) pipe ,change bpp into 16 */
 #ifdef CONFIG_FB_MSM_BPP_SWITCH
 	if(16 != mfd->panel_info.bpp)
@@ -508,6 +529,7 @@ void mdp4_mddi_overlay_kickoff(struct msm_fb_data_type *mfd,
 		mdp4_switch_bpp_config(mfd,16);	
 	}
 #endif
+/* DTS2010080403325 lijianzhao 20100804 end >*/
 
 	/* change mdp clk while mdp is idle` */
 	mdp4_set_perf_level();
@@ -612,6 +634,7 @@ void mdp4_dma_s_update_lcd(struct msm_fb_data_type *mfd,
 void mdp4_mddi_dma_s_kickoff(struct msm_fb_data_type *mfd,
 				struct mdp4_overlay_pipe *pipe)
 {
+/*< DTS2010080403325 lijianzhao 20100804 begin */
 /* use dma_s pipe ,change bpp into 24 */
 #ifdef CONFIG_FB_MSM_BPP_SWITCH
 	if(24 != mfd->panel_info.bpp)
@@ -619,6 +642,7 @@ void mdp4_mddi_dma_s_kickoff(struct msm_fb_data_type *mfd,
 		mdp4_switch_bpp_config(mfd,24);	
 	}
 #endif
+/* DTS2010080403325 lijianzhao 20100804 end >*/
 	/* change mdp clk while mdp is idle` */
 	mdp4_set_perf_level();
 
@@ -630,12 +654,14 @@ void mdp4_mddi_dma_s_kickoff(struct msm_fb_data_type *mfd,
 	mdp4_stat.kickoff_dmas++;
 
 	/* wait until DMA finishes the current job */
+/* <DTS2010100802855 hufeng 20101008 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
     /* huawei modify */
 	wait_for_completion_interruptible_timeout(&mfd->dma->comp, 2 * HZ);
 #else
 	wait_for_completion(&mfd->dma->comp);
 #endif
+/* DTS2010100802855 hufeng 20101008 end> */
 	mdp_disable_irq(MDP_DMA_S_TERM);
 }
 

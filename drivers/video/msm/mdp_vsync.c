@@ -255,20 +255,24 @@ void mdp_vsync_cfg_regs(struct msm_fb_data_type *mfd,
 	 * load the last line + 1 to be in the
 	 * safety zone
 	 */
+				/*< DTS2011110801827 fengwei 20111207 begin */
 				/* set the value with which the read pointer 
 				 * gets loaded at primary vsync edge. 
 				 * qualcomm default : 0; (lead to mdp block) 
 				 * huawei default : lcd_y / 2
 				 */
 #ifdef CONFIG_HUAWEI_KERNEL
+/*< DTS2012030300810 liuyuntao 20120330 begin */
 #ifdef CONFIG_FB_MSM_MDDI
 		vsync_load_cnt = mfd->panel_info.yres;
 #else
 		vsync_load_cnt =  mfd->panel_info.yres/2;
 #endif
+/* DTS2012030300810 liuyuntao 20120330 end >*/
 #else
 				vsync_load_cnt = mfd->panel_info.yres;
 #endif
+				/* DTS2011110801827 fengwei 20111207 end >*/
 
 	/* line counter init value at the next pulse */
 	MDP_OUTP(MDP_BASE + MDP_PRIM_VSYNC_INIT_VAL,

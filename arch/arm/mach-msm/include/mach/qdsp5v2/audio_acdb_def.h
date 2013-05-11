@@ -44,17 +44,39 @@
 #define ACDB_ID_FM_RX					0x4F
 /*Replace the max device ID,if any new device is added Specific to RTC only*/
 
+/*< DTS2010120204486 dongchen 20101223 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 #define ACDB_ID_SPKR_PHONE_MUSIC_MONO	0xF0
 #define ACDB_ID_SPKR_PHONE_MUSIC_STEREO 	0xF1
+#endif
+/* DTS2010120204486 dongchen 20101223 end >*/
+
+/*< DTS2010122105598 dongchen 20101221 begin */
+#ifdef CONFIG_HUAWEI_KERNEL
 #define ACDB_ID_HEADSET_SPKR_MUSIC_STEREO  0xF2
+#endif
+/* DTS2010122105598 dongchen 20101221 end >*/
+
+/*< DTS2011021900121 dongchen 20110217 begin */
+#ifdef CONFIG_HUAWEI_KERNEL
 #define ACDB_ID_HANDSET_HAC_SPKR  0xF3
+#endif
+/* DTS2011021900121 dongchen 20110217 end >*/
+
+/*< DTS2011031005289 dongchen 20110329 begin */
+#ifdef CONFIG_HUAWEI_KERNEL
 #define ACDB_ID_SPKR_PHONE_PTT  0xF4
 #define ACDB_ID_SPKR_PHONE_PTT_MIC  0xF5
+#endif
+/* DTS2011031005289 dongchen 20110329 end >*/
+
+/*< DTS2011101304810 dongchen 20111013 begin */
+#ifdef CONFIG_HUAWEI_KERNEL
 #define ACDB_ID_HEADSET_STEREO_PLUS_SPKR_MONO_RX	0x13
 #endif
 
 #define ACDB_ID_MAX                                 ACDB_ID_SPKR_PHONE_PTT_MIC
+/* DTS2011101304810 dongchen 20111013 end >*/
 
 /* ID used for virtual devices */
 #define PSEUDO_ACDB_ID 					0xFFFF

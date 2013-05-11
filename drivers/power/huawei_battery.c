@@ -20,7 +20,7 @@
  * this needs to be before <linux/kernel.h> is loaded,
  * and <linux/sched.h> loads <linux/kernel.h>
  */
-#define DEBUG  0
+#define DEBUG  1
 
 /*< DTS2011041700393 lijianzhao 20110417 begin */
 /* modify for 4125 baseline */

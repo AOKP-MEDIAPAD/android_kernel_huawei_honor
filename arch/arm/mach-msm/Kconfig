@@ -704,6 +704,7 @@ config MACH_FSM9XXX_SURF
 	  chipset based SURF evaluation board and
 	  FFA board.
 
+#/*< BU5D08419 haoqingtao 20100424 begin*/
 config MACH_MSM7X30_U8800
        depends on ARCH_MSM7X30
        depends on !MSM_STACKED_MEMORY
@@ -712,7 +713,8 @@ config MACH_MSM7X30_U8800
        bool "MSM7x30 U8800"
        help
          Support for the Qualcomm MSM7x30 platform board.
-
+#/* BU5D08419 haoqingtao 20100424 end>*/   
+#/*< DTS2010092400487  lijianzhao 20100924 begin */
 config MACH_MSM7X30_U8820
        depends on ARCH_MSM7X30
        depends on !MSM_STACKED_MEMORY
@@ -721,7 +723,8 @@ config MACH_MSM7X30_U8820
        bool "MSM7x30 U8820"
        help
          Support for the Qualcomm MSM7x30 platform board.
-
+#/* DTS2010092400487  lijianzhao 20100924 end >*/
+#/*< DTS2010112702297 wangquanli 201001125 begin */
 config MACH_MSM7X30_U8800_51
        depends on ARCH_MSM7X30
        depends on !MSM_STACKED_MEMORY
@@ -730,7 +733,9 @@ config MACH_MSM7X30_U8800_51
        bool "MSM7x30 U8800_51"
        help
          Support for the Qualcomm MSM7x30 platform board.
-
+#/* DTS2010112702297 wangquanli 201001125 end >*/
+#/*< DTS2011030202729  liliang 20110302  begin */
+#/*< DTS2011030702301  liliang 20110307  begin */
 config MACH_MSM8255_U8800_PRO
        depends on ARCH_MSM7X30
        depends on !MSM_STACKED_MEMORY
@@ -739,7 +744,9 @@ config MACH_MSM8255_U8800_PRO
        bool "MSM8255 U8800_PRO"
        help
          Support for the Qualcomm MSM8255 platform board.
-
+#/* DTS2011030702301  liliang 20110307 end >*/
+#/* DTS2011030202729  liliang 20110302 end >*/ 
+# /* <DTS2011041501614 duangan 2011-4-18 begin */
 config MACH_MSM8255_U8860
        depends on ARCH_MSM7X30
        depends on !MSM_STACKED_MEMORY
@@ -748,7 +755,8 @@ config MACH_MSM8255_U8860
        bool "MSM8255 U8860"
        help
          Support for the Qualcomm MSM8255 platform board.
-
+# /* DTS2011041501614 duangan 2011-4-18 end> */
+# /* <DTS2011050700551 zhangbo 20110505 begin */
 config MACH_MSM8255_C8860
        depends on ARCH_MSM7X30
        depends on !MSM_STACKED_MEMORY
@@ -757,7 +765,8 @@ config MACH_MSM8255_C8860
        bool "MSM8255 C8860"
        help
          Support for the Qualcomm MSM8255 platform board.
-
+# /* DTS2011050700551 zhangbo 20110505 end> */
+# /* <DTS2011062600102 sunhonghui 20110626 begin */
 config MACH_MSM8255_U8860LP
        depends on ARCH_MSM7X30
        depends on !MSM_STACKED_MEMORY
@@ -766,7 +775,8 @@ config MACH_MSM8255_U8860LP
        bool "MSM8255 U8860LP"
        help
          Support for the Qualcomm MSM8255 platform board.
-
+# /* DTS2011062600102 sunhonghui 20110626 end> */
+# /* < DTS2012022905490 ganfan 20120301 begin */
 config MACH_MSM8255_U8860_R
        depends on ARCH_MSM7X30
        depends on !MSM_STACKED_MEMORY
@@ -775,7 +785,8 @@ config MACH_MSM8255_U8860_R
        bool "MSM8255 U8860_R"
        help
          Support for the Qualcomm MSM8255 platform board.
-
+# /* DTS2012022905490 ganfan 20120301 end > */
+#/*<DTS2011091502092 liyuping 20110915 begin */
 config MACH_MSM8255_U8860_51
        depends on ARCH_MSM7X30
        depends on !MSM_STACKED_MEMORY
@@ -784,7 +795,8 @@ config MACH_MSM8255_U8860_51
        bool "MSM8255 U8860_51"
        help
          Support for the Qualcomm MSM8255 platform board.
-
+#/* DTS2011091502092 liyuping 20110915 end> */
+#/* <DTS2011071600361 liyuping 20110716 begin */
 config MACH_MSM8255_U8860_92
        depends on ARCH_MSM7X30
        depends on !MSM_STACKED_MEMORY
@@ -793,7 +805,40 @@ config MACH_MSM8255_U8860_92
        bool "MSM8255 U8860_92"
        help
          Support for the Qualcomm MSM8255 platform board.
+#/* DTS2011071600361 liyuping 20110716 end> */
 
+#/* < DTS2011082302564 liwei 20110823 begin */
+config MACH_MSM8255_U8680
+       depends on ARCH_MSM7X30
+       depends on !MSM_STACKED_MEMORY
+       depends on HUAWEI_KERNEL   
+       default y
+       bool "MSM8255 U8680"
+       help
+         Support for the Qualcomm MSM8255 platform board.
+#/* DTS2011082302564 liwei 20110823 end > */
+
+# /* < DTS2011102401822 liwei 20111024 begin */
+config MACH_MSM8255_U8667
+       depends on ARCH_MSM7X30
+       depends on !MSM_STACKED_MEMORY
+       depends on HUAWEI_KERNEL   
+       default y
+       bool "MSM8255 U8667"
+       help
+         Support for the Qualcomm MSM8255 platform board.
+# /* DTS2011102401822 liwei 20111024 end > */
+# /* <DTS2011091200073 zhangbo 20110912 begin */
+config MACH_MSM8255_U8730
+       depends on ARCH_MSM7X30
+       depends on !MSM_STACKED_MEMORY
+       depends on HUAWEI_KERNEL   
+       default y
+       bool "MSM8255 U8730"
+       help
+         Support for the Qualcomm MSM8255 platform board.
+# /* DTS2011091200073 zhangbo 20110912 end> */
+# /*< DTS2011062705805 yanzhijun 20110627 begin */
 config MACH_MSM7X27A_UMTS
         depends on ARCH_MSM7X27A
         depends on !MSM_STACKED_MEMORY
@@ -809,7 +854,10 @@ config MACH_MSM7X27A_CDMA
 	bool "MSM7X27A_CDMA SURF"
 	help
 	  Support for the HUAWEI 7X27A CDMA SURF board.
+# /* DTS2011062705805 yanzhijun 20110627 end >*/ 
 
+# /* < DTS2011082001871 niguodong 20110820 begin */
+#/* <DTS2011102601993 niguodong 20111025 begin */
 config MACH_MSM7X27A_U8815
         depends on ARCH_MSM7X27A
         depends on !MSM_STACKED_MEMORY
@@ -817,7 +865,7 @@ config MACH_MSM7X27A_U8815
 	bool "MSM7X27A_U8815 SURF"
 	help
 	  Support for the HUAWEI 7X27A U8815 board.
-
+#/* DTS2011102601993 niguodong 201101025 end> */  
 config MACH_MSM7X27A_U8655
         depends on ARCH_MSM7X27A
         depends on !MSM_STACKED_MEMORY
@@ -825,7 +873,11 @@ config MACH_MSM7X27A_U8655
 	bool "MSM7X27A_U8655 SURF"
 	help
 	  Support for the HUAWEI 7X27A U8655 board.
+	  
+# /* DTS2011082001871 niguodong 20110820 end > */
 
+# /*< DTS2011101104384 xiewen 20111011 begin */
+# /*< DTS2011102705220 xiewen 20111027 begin */
 config MACH_MSM7X27A_U8655_EMMC
         depends on ARCH_MSM7X27A
         depends on !MSM_STACKED_MEMORY
@@ -833,7 +885,10 @@ config MACH_MSM7X27A_U8655_EMMC
 	bool "MSM7X27A_U8655Pro SURF"
 	help
 	  Support for the HUAWEI 7X27A U8655Pro board.
+# /* DTS2011102705220 xiewen 20111027 end >*/
+# /* DTS2011101104384 xiewen 20111011 end >*/
 
+# /* < DTS2011092904296  yangyang 20111008 begin */
 config MACH_MSM7X27A_C8655_NAND
         depends on ARCH_MSM7X27A
         depends on !MSM_STACKED_MEMORY
@@ -841,7 +896,9 @@ config MACH_MSM7X27A_C8655_NAND
 	bool "MSM7X27A_C8655_NAND SURF"
 	help
 	  Support for the HUAWEI 7X27A C8655_NAND board.
+#  /* DTS2011092904296  yangyang 20111008 end > */ 
 
+# /* < DTS2011111603552  dingzhipeng 20111116 begin */
 config MACH_MSM7X27A_U8185
 	depends on ARCH_MSM7X27A
 	depends on !MSM_STACKED_MEMORY
@@ -849,7 +906,9 @@ config MACH_MSM7X27A_U8185
 	bool "MSM7X27A_U8185 SURF"
 	help
 	  Support for the HUAWEI 7X27A U8185 board.
+# /* DTS2011111603552  dingzhipeng 20111116 end > */
 
+# /* < DTS2011110803299 yangyang 20111111 begin */
 config MACH_MSM7X27A_M660
 	depends on ARCH_MSM7X27A
 	depends on !MSM_STACKED_MEMORY
@@ -857,7 +916,9 @@ config MACH_MSM7X27A_M660
 	bool "MSM7X27A_M660 SURF"
 	help
 	  Support for the HUAWEI 7X27A M660 board.
+# /* DTS2011110803299 yangyang 20111111 end > */
 
+# /* < DTS2011122105081  niguodong 20111222 begin */
 config MACH_MSM7X27A_U8661
 	depends on ARCH_MSM7X27A
 	depends on !MSM_STACKED_MEMORY
@@ -865,7 +926,9 @@ config MACH_MSM7X27A_U8661
 	bool "MSM7X27A_U8661 SURF"
 	help
 	  Support for the HUAWEI 7X27A U8661 board.
+# /* DTS2011122105081  niguodong 20111222 end > */
 
+# /* < DTS2011121402399 yangyang 20111214 begin */
 config MACH_MSM7X27A_C8820
 	depends on ARCH_MSM7X27A
 	depends on !MSM_STACKED_MEMORY
@@ -881,7 +944,9 @@ config MACH_MSM7X27A_C8825D
 	bool "MSM7X27A_C8825D SURF"
 	help
 	  Support for the HUAWEI 7X27A C8825D board.	  
+# /* DTS2011121402399 yangyang 20111214 end > */
 
+#/*< DTS2012022300887 fengwei 20120224 begin */
 config MACH_MSM7X27A_C8668D
 	depends on ARCH_MSM7X27A
 	depends on !MSM_STACKED_MEMORY
@@ -889,26 +954,30 @@ config MACH_MSM7X27A_C8668D
 	bool "MSM7X27A_C8668D SURF"
 	help
 	  Support for the HUAWEI 7X27A C8668D board.	  
+#/* DTS2012022300887 fengwei 20120224 end >*/
 
 endmenu
 
+#/* <DTS2010120303164 penghai 20101203 begin */
 config HUAWEI_KEY_TEST
 	bool "HUAWEI auto key test driver"
 	depends on HUAWEI_KERNEL
 	default n
 	help
 	  Select Y if use auto key test.
-
+#/* DTS2010120303164 penghai 20101203 end> */ 
+# changed by durui
 config  HUAWEI_KERNEL
 	bool  "HUAWEI BSP"
 	default n
-
+# /*< DTS2012040200123 lizhigang 20120401 begin */
 config FRAMEBUF_SELF_ADAPT
 	tristate "Huawei framebuffer self adapt"	
 	depends on HUAWEI_KERNEL
 	default n
 	help
 	  if Y ,select FRAMEBUF_SELF_ADAPT  
+# /* DTS2012040200123 lizhigang 20120401 end >*/
 
 config MSM_STACKED_MEMORY
 	bool "Stacked Memory"
@@ -1731,12 +1800,14 @@ config SURF_FFA_GPIO_KEYPAD
 	help
 	  Select if the GPIO keypad is attached.
 
+#/*< DTS2012020306500 lijianzhao 20120204 begin */
 config HUAWEI_GPIO_KEYPAD
 	bool "MSM HUAWEI GPIO keypad"
 	depends on INPUT_GPIO = "y"
 	default n
 	help
 	  Select if the GPIO keypad is attached.
+#/* DTS2012020306500 lijianzhao 20120204 end >*/
 
 config MSM_SLEEP_TIME_OVERRIDE
 	bool "Allow overriding suspend/sleep time with PM module parameter"
@@ -1790,26 +1861,33 @@ choice
 		bool "Memory in deep power down"
 endchoice
 
+#/*< DTS2012021003176 yanzhijun 20120210 begin */
+# merge DTS2011110800980 fangxinyong  
 config HUAWEI_KEY_TEST
 	bool "HUAWEI auto key test driver"
 	depends on HUAWEI_KERNEL
 	default y
 	help
 	  Select Y if use auto key test.
+#/* DTS2012021003176 yanzhijun 20120210 end >*/ 
 
+#/* < DTS2011030801141 renxigang 20110308 begin */
 config HUAWEI_SMEM_SLEEP_LOG
 	bool "HUAWEI smem sleep log driver"
 	depends on HUAWEI_KERNEL
 	default n
 	help
 	  Select Y if use smem sleep log driver.
+#/* DTS2011030801141 renxigang 20110308 end > */
 
+#/* < DTS2011111003569 fangxinyong 20111110 begin */
 config HUAWEI_KERNEL_DEBUG
 	bool "HUAWEI kernel debug"
 	depends on HUAWEI_KERNEL
 	default n
 	help
 	  Select Y if print HUAWEI log
+#/* DTS2011111003569 fangxinyong 20111110 end > */
 
 choice
 	prompt "Power management timeout action"
@@ -2251,45 +2329,64 @@ config MSM_RTB_SEPARATE_CPUS
 
 endif
 
+#/* < DTS2010073000404 liqingshan 20100730 begin */
 config HUAWEI_FEATURE_U8800_FM
 	bool "HUAWEI 8800 FM"
 	depends on HUAWEI_KERNEL
 	default n
 	help
 	  if Y ,select HUAWEI_FEATURE_U8800_FM
+#/* DTS2010073000404 liqingshan 20100730 end > */
+#/*< DTS2012020306500 lijianzhao 20120204 begin */
+#/* move to driver/leds/kconfig */
+#/* DTS2012020306500 lijianzhao 20120204 end >*/
 
+#/*<BU5D07918, sibingsong 20100416 begin*/
 config HUAWEI_FEATURE_VIBRATOR
 	depends on HUAWEI_KERNEL
 	tristate "Huawei 8800 vibrator"	
 	default n
 	help
 	  if Y ,select HUAWEI_FEATURE_VIBRATOR 
+#/*BU5D07918,sibingsong 20100416 end>*/
 
+#/* < DTS2010080500080 luojianhong 201000817 begin*/
 config HUAWEI_SETTING_TIMER_FOR_VIBRATOR_OFF
 	depends on HUAWEI_FEATURE_VIBRATOR
 	tristate "Huawei stop vibratting with timer"	
 	default n
 	help
 	  if Y ,select HUAWEI_SETTING_TIMER_FOR_VIBRATOR_OFF 
+#/*  DTS2010080500080 luojianhong 201000817 end > */
 
+#/* < DTS2010090300591 luojianhong 201000903 begin*/
 config HUAWEI_U8800PP1_WIFI_LOW_CONSUME
 	depends on MACH_MSM7X30_U8800
 	tristate "Huawei config wifi for low consume at PP1 version"	
 	default y
 	help
 	  if Y ,select HUAWEI_U8800PP1_CONFIG_WIFI_LOW_CONSUME 
+#/*  DTS2010090300591 luojianhong 201000903 end > */
 
+#/*<BU5D07679 zhangtao 20100406 begin */
 config  HUAWEI_FEATURE_OEMINFO
 	depends on HUAWEI_KERNEL
 	default y
 	tristate "OEMINFO"
+#/*BU5D07679 zhangtao 20100406 end> */
 
+#/* <DTS2010071502918 shenjinming 20101008 begin */
 config HUAWEI_POWER_DOWN_CHARGE
 	default y
 	tristate "huawei_power_down_charge"
 	help
 	  Say Y here if you want to support huawei_power_down_charge.
+#/* DTS2010071502918 shenjinming 20101008 end> */ 
 
+#/*< DTS2012020306500 lijianzhao 20120204 begin */
+#/* move to driver/leds/kconfig */
+#/* DTS2012020306500 lijianzhao 20120204 end >*/
+#/* < DTS2011082200901 genghua 20110822 begin */
 config HUAWEI_RPC_CRASH_DEBUG
 	bool "HUAWEI rpc crash debug"
         select OPROFILE
@@ -2297,4 +2394,5 @@ config HUAWEI_RPC_CRASH_DEBUG
 	default n
 	help
 	  Select Y if use rpc related logs.
+#/* DTS2011082200901 genghua 20110822 end > */
 

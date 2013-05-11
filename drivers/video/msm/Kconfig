@@ -181,6 +181,7 @@ config FB_MSM_MIPI_DSI_TC358764_DSI2LVDS
 	  and up to WUXGA 1920x1200 18-bit
 	  using a dual LVDS link.
 
+#/*< DTS2012020306500 lijianzhao 20120204 begin */
 config FB_HUAWEI_MIPI_DSI_RSP61408
 	bool "support MIPI RSP61408"
 	select FB_MSM_MIPI_DSI
@@ -221,7 +222,9 @@ config FB_HUAWEI_LCDC_HX8347G
 	bool "support LCDC HX8347G"
 	select FB_MSM_LCDC_PANEL
 	default n
+#/* DTS2012020306500 lijianzhao 20120204 end >*/
 
+#/*< DTS2012021007223 lijianzhao 20120211 begin */
 config FB_HUAWEI_MDDI_NT35582
 	bool "support MDDI NT35582"
 	select FB_MSM_MDDI
@@ -252,6 +255,7 @@ config FB_HUAWEI_MDDI_HX8357C
 	bool "support MDDI HX8357C"
 	select FB_MSM_MDDI
 	default n
+#/* DTS2012021007223 lijianzhao 20120211 end >*/
 	
 config FB_MSM_LCDC_ST15_WXGA
     bool
@@ -808,16 +812,23 @@ config FB_MSM_DEFAULT_DEPTH_RGBA8888
 
 endchoice
 
+#/*< DTS2011072500979 jiaoshuangwei 20110725 begin */
 #/* add the code for dynamic gamma function */
 config FB_DYNAMIC_GAMMA
 	bool "Support for DYNAMIC_GAMMA fuction of glory"
 	depends on FB_MSM
+#/*< DTS2011081601583 pengyu 20110816 begin */
+#/* change default state to 'n', move this config to hw7x30_defconfig */
 	default n
+#/* DTS2011081601583 pengyu 20110816 end >*/
+#/* DTS2011072500979 jiaoshuangwei 20110725 end >*/
 
+#/*< DTS2011081800466 pengyu 20110818 begin */
 #/* Add code for automatic CABC function */
 config FB_AUTO_CABC
 	bool "Support for AUTO_CABC fuction"
 	depends on FB_MSM
 	default n
+#/* DTS2011081800466 pengyu 20110818 end >*/
 
 endif

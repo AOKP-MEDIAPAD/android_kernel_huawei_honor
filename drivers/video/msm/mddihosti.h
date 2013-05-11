@@ -17,8 +17,10 @@
 #include "msm_fb.h"
 #include "mddihost.h"
 #include <linux/clk.h>
+/*<DTS2011052404584 fengwei 20110603 begin*/
 /*close Mddi Reverse link for resloving blankscreen*/
 #define FEATURE_MDDI_DISABLE_REVERSE 
+/*DTS2011052404584 fengwei 20110603 end>*/
 
 /* Register offsets in MDDI, applies to both msm_pmdh_base and
  * (u32)msm_emdh_base. */

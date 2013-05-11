@@ -28,9 +28,11 @@
 #include <linux/spinlock.h>
 
 #include <linux/fb.h>
+/* <DTS2012011400657 liguosheng 20120114 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 #include <linux/hardware_self_adapt.h>
 #endif
+/* DTS2012011400657 liguosheng 20120114 end> */
 #include "mdp.h"
 #include "msm_fb.h"
 #include "mdp4.h"
@@ -50,11 +52,13 @@ extern spinlock_t mdp_spin_lock;
 extern uint32 mdp_intr_mask;
 #endif
 
+/* <DTS2011121202745 sunkai 20111213 begin */
 /* Defined in mdp.c to indicate support appboot logo display */
 #ifdef CONFIG_HUAWEI_KERNEL
 extern unsigned long mdp_timer_duration;
 extern boolean mdp_continues_display;
 #endif
+/* DTS2011121202745 sunkai 20111213 end> */
 int first_pixel_start_x;
 int first_pixel_start_y;
 
@@ -101,10 +105,12 @@ int mdp_lcdc_on(struct platform_device *pdev)
 	uint32 block = MDP_DMA2_BLOCK;
 	int ret;
 
+/* <DTS2012011400657 liguosheng 20120114 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 	lcd_panel_type lcdtype = LCD_NONE;
 	lcd_align_type lcd_align = LCD_PANEL_ALIGN_LSB;
 #endif
+/* DTS2012011400657 liguosheng 20120114 end> */
 	mfd = (struct msm_fb_data_type *)platform_get_drvdata(pdev);
 
 	if (!mfd)
@@ -123,6 +129,7 @@ int mdp_lcdc_on(struct platform_device *pdev)
 	buf = (uint8 *) fbi->fix.smem_start;
 	buf += fbi->var.xoffset * bpp + fbi->var.yoffset * fbi->fix.line_length;
 
+/* <DTS2012011400657 liguosheng 20120114 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
     lcd_align = get_lcd_align_type();
     if(lcd_align == LCD_PANEL_ALIGN_MSB)
@@ -136,6 +143,7 @@ int mdp_lcdc_on(struct platform_device *pdev)
 #else
     dma2_cfg_reg = DMA_PACK_ALIGN_LSB | DMA_OUT_SEL_LCDC;
 #endif
+/* DTS2012011400657 liguosheng 20120114 end> */
 
 	if (mfd->fb_imgType == MDP_BGR_565)
 		dma2_cfg_reg |= DMA_PACK_PATTERN_BGR;
@@ -294,6 +302,7 @@ int mdp_lcdc_on(struct platform_device *pdev)
 		MDP_OUTP(MDP_BASE + timer_base + 0x38, active_v_end);
 	}
 
+/* <DTS2012011400657 liguosheng 20120114 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 	ret = 0;
     lcdtype = get_lcd_panel_type();
@@ -304,6 +313,7 @@ int mdp_lcdc_on(struct platform_device *pdev)
 #else
 	ret = panel_next_on(pdev);
 #endif
+/* DTS2012011400657 liguosheng 20120114 end> */
 	if (ret == 0) {
 		/* enable LCDC block */
 		MDP_OUTP(MDP_BASE + timer_base, 1);
@@ -311,6 +321,7 @@ int mdp_lcdc_on(struct platform_device *pdev)
 	}
 	/* MDP cmd block disable */
 	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
+/* <DTS2012011400657 liguosheng 20120114 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 	/*need to send 2 frame pclk data before sending sleep out command*/
 	if( (LCD_HX8357C_TIANMA_HVGA == lcdtype )||(LCD_HX8357B_TIANMA_HVGA == lcdtype ))
@@ -319,12 +330,15 @@ int mdp_lcdc_on(struct platform_device *pdev)
 		ret = panel_next_on(pdev);
 	}
 #endif
+/* DTS2012011400657 liguosheng 20120114 end> */
+/* <DTS2011121202745 sunkai 20111213 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 	if(mdp_continues_display) {
 		mdp_continues_display = FALSE;
 		mdp_timer_duration = (HZ);
 	}
 #endif
+/* DTS2011121202745 sunkai 20111213 end> */
 	return ret;
 }
 
@@ -344,6 +358,7 @@ int mdp_lcdc_off(struct platform_device *pdev)
 	}
 #endif
 
+/* <DTS2012011400657 liguosheng 20120114 begin */
 /*still need to send 2 frame data after sending sleep in command*/
 #ifdef CONFIG_HUAWEI_KERNEL
 	ret = panel_next_off(pdev);
@@ -357,6 +372,7 @@ int mdp_lcdc_off(struct platform_device *pdev)
 #ifndef CONFIG_HUAWEI_KERNEL
 	ret = panel_next_off(pdev);
 #endif
+/* DTS2012011400657 liguosheng 20120114 end> */
 	/* delay to make sure the last frame finishes */
 	msleep(16);
 

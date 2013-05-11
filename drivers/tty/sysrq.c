@@ -45,6 +45,7 @@
 #include <asm/ptrace.h>
 #include <asm/irq_regs.h>
 
+/* <DTS2011092706493 hufeng 20110927 begin */
 /** port the volumedown + volumeup + power key to trigger sysrq crash function **/
 /* Whether we react on sysrq keys or just ignore them */
 /* disable the sysrq function , 0 presents disable*/ 
@@ -53,6 +54,7 @@ static int __read_mostly sysrq_enabled = 0;
 #else
 static int __read_mostly sysrq_enabled = SYSRQ_DEFAULT_ENABLE;
 #endif
+/* DTS2011092706493 hufeng 20110927 end> */
 static bool __read_mostly sysrq_always_enabled;
 
 static bool sysrq_on(void)
@@ -606,6 +608,7 @@ static void sysrq_reinject_alt_sysrq(struct work_struct *work)
 	}
 }
 
+/* <DTS2011092706493 hufeng 20110927 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 static bool sysrq_down;
 static int sysrq_alt_use;
@@ -664,6 +667,7 @@ out:
 }
 
 #else
+/* DTS2011092706493 hufeng 20110927 end> */
 static bool sysrq_filter(struct input_handle *handle,
 			 unsigned int type, unsigned int code, int value)
 {
@@ -767,7 +771,9 @@ static bool sysrq_filter(struct input_handle *handle,
 
 	return suppress;
 }
+/* <DTS2011092706493 hufeng 20110927 begin */
 #endif
+/* DTS2011092706493 hufeng 20110927 end> */
 
 static int sysrq_connect(struct input_handler *handler,
 			 struct input_dev *dev,
@@ -776,11 +782,13 @@ static int sysrq_connect(struct input_handler *handler,
 	struct sysrq_state *sysrq;
 	int error;
 
+/* <DTS2011092706493 hufeng 20110927 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
     sysrq_down = false;
     sysrq_alt = 0;
 #endif
 
+/* DTS2011092706493 hufeng 20110927 end> */
 	sysrq = kzalloc(sizeof(struct sysrq_state), GFP_KERNEL);
 	if (!sysrq)
 		return -ENOMEM;
@@ -830,6 +838,7 @@ static void sysrq_disconnect(struct input_handle *handle)
  * later, but we expect all such keyboards to have left alt.
  */
 static const struct input_device_id sysrq_ids[] = {
+/* <DTS2011092706493 hufeng 20110927 begin */
 /* remove the keybit of KEY_LEFTALT for sysrq function */ 
 #ifdef CONFIG_HUAWEI_KERNEL
 	{
@@ -844,6 +853,7 @@ static const struct input_device_id sysrq_ids[] = {
 		.keybit = { BIT_MASK(KEY_LEFTALT) },
 	},
 #endif
+/* DTS2011092706493 hufeng 20110927 end> */
 	{ },
 };
 

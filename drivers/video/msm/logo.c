@@ -26,6 +26,7 @@
 
 #define fb_width(fb)	((fb)->var.xres)
 #define fb_height(fb)	((fb)->var.yres)
+/* <BU5D10614 shenjinming 20100528 begin*/
 #ifndef CONFIG_HUAWEI_KERNEL
 /* for 565BMP format, 2 bytes per pixel */
 #define fb_size(fb)	((fb)->var.xres * (fb)->var.yres * 2)
@@ -33,6 +34,7 @@
 /* for 888BMP format, 3 bytes per pixel */
 #define fb_size(fb)	((fb)->var.xres * (fb)->var.yres * 3)
 #endif
+/* BU5D10614 shenjinming 20100528 end>*/
 
 static void memset16(void *_ptr, unsigned short val, unsigned count)
 {
@@ -102,6 +104,8 @@ err_logo_close_file:
 }
 EXPORT_SYMBOL(load_565rle_image);
 
+
+/* <BU5D10614 shenjinming 20100528 begin*/
 #ifdef CONFIG_HUAWEI_KERNEL
 static void memset32(void *pDst, uint32_t Value, int Count)
 {
@@ -184,3 +188,6 @@ err_logo_close_file:
 }
 EXPORT_SYMBOL(load_888rle_image);
 #endif
+/* BU5D10614 shenjinming 20100528 end>*/
+
+

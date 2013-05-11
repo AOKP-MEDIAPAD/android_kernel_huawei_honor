@@ -1417,8 +1417,10 @@ int mdp_ppp_blit(struct fb_info *info, struct mdp_blit_req *req)
 		iBuf.mdpImg.mdpOp |= MDPOP_DITHER;
 
 	if (req->flags & MDP_BLEND_FG_PREMULT) {
+/*< DTS2012022307519 zhongjinrong 20120405 begin */
 /* Add qcom patch to resolve tranparent problem ,case number:00807793 */
 #if defined(CONFIG_FB_MSM_MDP31) || defined(CONFIG_FB_MSM_MDP303)
+/* DTS2012022307519 zhongjinrong 20120405 end >*/
 		iBuf.mdpImg.mdpOp |= MDPOP_FG_PM_ALPHA;
 #else
 		put_img(p_src_file);

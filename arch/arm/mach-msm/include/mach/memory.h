@@ -37,7 +37,13 @@
 
 #define EBI0_PHYS_OFFSET PHYS_OFFSET
 #define EBI0_PAGE_OFFSET PAGE_OFFSET
+/* < DTS2011091305498 fangxinyong 20110927 begin */
+/* modified for 1G ddr memory support */
+/*< DTS2012050806485 hujun 20120510 begin*/
+/*revert 1G memory modification*/
 #define EBI0_SIZE 0x10000000
+/* DTS2012050806485 hujun 20120510  end >*/
+/* DTS2011091305498 fangxinyong 20110927 end > */
 
 #define EBI1_PHYS_OFFSET 0x40000000
 #define EBI1_PAGE_OFFSET (EBI0_PAGE_OFFSET + EBI0_SIZE)
@@ -58,6 +64,7 @@
 
 #endif
 
+/* < DTS2012022004105 fangxinyong 20120220 begin */
 /* merge from DTS2012020205949
  * In 7x27A we use flatmem mode, but this will lead VMALLOC area limit to 160M,
  *  This memory config will case low performance for GPU.
@@ -85,6 +92,7 @@
 
 #endif
 #endif
+/* DTS2012022004105 fangxinyong 20120220 end > */
 
 #ifndef __ASSEMBLY__
 void *alloc_bootmem_aligned(unsigned long size, unsigned long alignment);

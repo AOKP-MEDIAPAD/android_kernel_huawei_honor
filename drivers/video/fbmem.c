@@ -1033,6 +1033,7 @@ int
 fb_blank(struct fb_info *info, int blank)
 {	
  	int ret = -EINVAL;
+/* <DTS2010101800931 shenjinming 20101028 begin */ 
 #ifdef CONFIG_HUAWEI_KERNEL   
  	if (blank > FB_BLANK_PWDN_GHG_RESUME)
  		blank = FB_BLANK_PWDN_GHG_RESUME;
@@ -1041,6 +1042,7 @@ fb_blank(struct fb_info *info, int blank)
  		blank = FB_BLANK_POWERDOWN;
     
 #endif
+/* DTS2010101800931 shenjinming 20101028 end> */ 
 	if (info->fbops->fb_blank)
  		ret = info->fbops->fb_blank(blank, info);
 

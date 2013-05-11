@@ -42,10 +42,12 @@ extern uint32 mdp_hw_revision;
 extern ulong mdp4_display_intf;
 extern spinlock_t mdp_spin_lock;
 extern int mdp_rev;
+/*< DTS2011081601583 pengyu 20110816 begin */
 #ifdef CONFIG_HUAWEI_KERNEL
 /* Extern the mdp_pipe_ctrl_mutex for process_lcd_table function */
 extern struct semaphore mdp_pipe_ctrl_mutex;
 #endif
+/* DTS2011081601583 pengyu 20110816 end >*/
 
 extern struct workqueue_struct *mdp_hist_wq;
 extern struct work_struct mdp_histogram_worker;
